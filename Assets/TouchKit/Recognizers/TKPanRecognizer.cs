@@ -11,7 +11,7 @@ public class TKPanRecognizer : TKAbstractGestureRecognizer
 	public event Action<TKPanRecognizer> gestureCompleteEvent;
 	
 	public Vector2 deltaTranslation;
-	public float deltaTranslationCm;
+	public Vector2 deltaTranslationCm;
 	public int minimumNumberOfTouches = 1;
 	public int maximumNumberOfTouches = 2;
 
@@ -71,12 +71,12 @@ public class TKPanRecognizer : TKAbstractGestureRecognizer
 		if (_trackingTouches.Count >=minimumNumberOfTouches && _trackingTouches.Count <= maximumNumberOfTouches){
 			var currentLocation = touchLocation();
 			deltaTranslation = currentLocation - _previousLocation;
-			deltaTranslationCm = deltaTranslation.magnitude / TouchKit.instance.ScreenPixelsPerCm;
+			deltaTranslationCm = deltaTranslation / TouchKit.instance.ScreenPixelsPerCm;
 			_previousLocation = currentLocation;
 
 			if (state == TKGestureRecognizerState.Began)
 			{
-				totalDeltaMovementInCm += deltaTranslationCm;
+				totalDeltaMovementInCm += deltaTranslationCm.magnitude;
 				Debug.Log(totalDeltaMovementInCm);
 
 				if (Math.Abs(totalDeltaMovementInCm) >= _minDistanceToPanCm)
